@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ActorApi.DAL;
 using ActorApi.Models;
+using ActorApi.DTOs;
 
 namespace ActorApi.Controllers
 {
@@ -29,10 +30,10 @@ namespace ActorApi.Controllers
         }
 
         // GET: api/Actors/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetActor(int id)
+        [HttpGet("{name}")]
+        public ActionResult GetActor(string name)
         {
-            var actor = await _context.Actors.FindAsync(id);
+            var actor =  _context.Actors.Where(actor=>actor.Name.ToLower().Contains(name.ToLower()));
 
             if (actor == null)
                 return NotFound();
@@ -42,27 +43,33 @@ namespace ActorApi.Controllers
 
         // PUT: api/Actors/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActor(int id, Actor actor)
+        public async Task<IActionResult> PutActor(int id, UpdateActorDto dtoactor)
         {
             Actor dbactor=await _context.Actors.FindAsync(id);
             if(dbactor == null) return BadRequest();
 
-            dbactor.Name= actor.Name.Trim();
+            dbactor.Name= dtoactor.Name==""? dbactor.Name.Trim():dtoactor.Name.Trim();
+            dbactor.Url=dtoactor.Url==""?dbactor.Url:dtoactor.Url;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Actors
         [HttpPost]
-        public async Task<ActionResult> PostActor(Actor actor)
+        public async Task<ActionResult> PostActor(CreateActorDto dtoactor)
         {
-            if (actor == null) return BadRequest();
-            actor.Name= actor.Name.Trim(); 
+            if(!ModelState.IsValid) return BadRequest();
+            Actor actor=new Actor()
+            {
+                Name= dtoactor.Name.Trim(),
+                Url=dtoactor.Url
+            };
+            
             _context.Actors.Add(actor);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
         // DELETE: api/Actors/5
@@ -79,9 +86,5 @@ namespace ActorApi.Controllers
             return Ok();
         }
 
-        private bool ActorExists(int id)
-        {
-            return _context.Actors.Any(e => e.Id == id);
-        }
     }
 }

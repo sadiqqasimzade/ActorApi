@@ -16,10 +16,23 @@
   <body>
     <section class="mt-5 container">
       <div class="row">
-        <div class="col-lg-2">
-          <span>Get actor by id</span>
-          <input class="form-control" type="number" />
-          <button class="btn btn-primary mt-2" id="getbyid">Get</button>
+        <div class="col-lg-4">
+          <span>Get actor by Name</span>
+          <input class="form-control mt-2" id="getbynameinput" placeholder="leave empty for getting all" />
+          <button class="btn btn-primary mt-2" id="getbynamebtn">Get</button>
+        </div>
+        <div class="col-lg-4">
+          <span>Create Actor</span>
+          <input class="form-control mt-2" id="createnameinput" placeholder="Name" />
+          <input class="form-control mt-2" id="createurlinput" placeholder="Url"  />
+          <button class="btn btn-primary mt-2" id="createbtn">Create</button>
+        </div>
+        <div class="col-lg-4">
+          <span>Update Actor</span>
+          <input class="form-control mt-2" id="updateidinput" placeholder="Id" />
+          <input class="form-control mt-2" id="updatenameinput" placeholder="Name  (you can leave this input empty)" />
+          <input class="form-control   mt-2" id="updateurlinput" placeholder="Url (you can leave this input empty)"  />
+          <button class="btn btn-primary mt-2" id="updatebyidbtn">Update</button>
         </div>
       </div>
       <div class="row mt-5" id="results">
@@ -32,13 +45,7 @@
     integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"
   ></script>
-  <script>
-    $("#getbyid").click(function () {
-      var val = $(this).prev().val();
-      
-      fetch(`http://localhost:29987/api/Actors/${val}`)
-  .then(response => response.json())
-  .then(data => console.log(data));
-    });
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="./main.js"></script>
 </html>

@@ -28,6 +28,13 @@ namespace ActorApi
         {
             services.AddControllers();
             services.AddDbContext<AppDbContext>(opt=>opt.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddCors(opt =>
+            opt.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(origin=>true);
+            }) 
+            );  
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +49,7 @@ namespace ActorApi
 
             app.UseAuthorization();
 
+            app.UseCors();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
